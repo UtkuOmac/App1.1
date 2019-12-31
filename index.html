@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html>
+<style>
+
+input{
+    background-color:transparent;
+}
+
+</style>
+
+
+<head>
+
+<input type="text" name="toggle" id="brightness" placeholder="Brightness Level" />
+<input type="text" name="toggle" id="speed" placeholder="Speed as ms" />
+<input id="btnSpeed" type="button" value="Change Speed" onclick="getspeed()"/>
+
+</head>
+
+
+<body>
+
+<script>
+
+var timing=1000;
+var interval;
+
+function applyInterval() {
+  if (interval) {
+    clearInterval(interval);
+  }
+  interval = window.setInterval("loop()", timing);
+}
+
+function getbrightness(){
+    // Selecting the input element and get its value 
+    var inputVal = document.getElementById("brightness").value;
+    return inputVal;
+    }
+
+function getspeed(){
+    timing = parseInt(speed.value);
+    applyInterval();
+    }    
+
+function increase_brightness(hex, percent){
+    // strip the leading # if it's there
+    hex = hex.replace(/^\s*#|\s*$/g, '');
+
+    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+    if(hex.length == 3){
+        hex = hex.replace(/(.)/g, '$1$1');
+    }
+
+    var r = parseInt(hex.substr(0, 2), 16),
+        g = parseInt(hex.substr(2, 2), 16),
+        b = parseInt(hex.substr(4, 2), 16);
+
+    return '#' +
+       ((0|(1<<8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+       ((0|(1<<8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+       ((0|(1<<8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
+}
+    
+function loop() {
+    var randomColor = Math.floor(Math.random()*16777215).toString(16);
+    var x="#"+randomColor;
+    var brightness_value=getbrightness();
+   //var speed_value=getspeed();
+
+
+    var y=increase_brightness(x,brightness_value);
+    document.body.style.backgroundColor = y;
+}
+
+//setInterval(loop,b);
+
+applyInterval();
+
+
+
+
+
+</script>
+
+
+
+
+</body>
+</html>
